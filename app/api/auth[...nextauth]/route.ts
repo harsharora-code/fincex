@@ -1,12 +1,18 @@
+import NextAuth from "next-auth";
+import GoogleProvider from "next-auth/providers/google";
 
-import { authConfig } from "@/app/lib/auth";
-import NextAuth from "next-auth"
+if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
+  throw new Error("Missing Google OAuth environment variables");
+}
 
-const handler = NextAuth(authConfig)
+const handler = NextAuth({
+  providers: [
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    }),
+  ],
+  secret: process.env.NEXTAUTH_SECRET,
+});
 
-export { handler as GET, handler as POST }
-
-console.log({
-    clientId: process.env.GOOGLE_CLIENT_ID ?? "",
-    clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? ""
-})
+export { handler as GET, handler as POST };
