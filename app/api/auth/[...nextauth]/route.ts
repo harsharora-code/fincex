@@ -1,6 +1,7 @@
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import {prisma as db} from '@/app/db';
+import {Keypair} from "@solana/web3.js"
 
 if (!process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
   throw new Error("Missing Google OAuth environment variables");
@@ -21,6 +22,7 @@ const handler  = NextAuth({
                 if(!email) {
                     return false;
                 }
+
                 const userDb = await db.user.findFirst ({
                     where: {
                         username: email
@@ -29,14 +31,24 @@ const handler  = NextAuth({
                 if(userDb) {
                     return true;
                 }
+
+            const keypair = Keypair.generate();
+            const publicKey = keypair.publicKey.toBase58();
+            const privateKey = keypair.secretKey;
+            console.log(publicKey);
+            console.log(privateKey);
+
                 await db.user.create({
                     data : {
                         username: email,
+                        name : profile?.name,
+                       // @ts-ignore
+                        profilePicture: profile?.picture,
                         provider: "Google",
                         solWallet: {
                             create : {
-                                publicKey: "",
-                                privateKey: "",
+                                publicKey: publicKey,
+                                privateKey: privateKey.toString(),
                             },
                         },
                         inrWallet: {
@@ -48,6 +60,7 @@ const handler  = NextAuth({
 
                     },
                 })
+                return true;
             }
             return false
         }
