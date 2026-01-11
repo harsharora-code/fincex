@@ -1,5 +1,36 @@
-export default function() {
+import { getServerSession } from "next-auth"
+import {ProfileCard} from "../components/ProfileCard"
+import {prisma as db} from "@/app/db"
+import { authConfig } from "../lib/auth"
+import { error } from "console";
+
+async function getuserWallet() {
+    const session = await getServerSession(authConfig);
+    const userWalletInfo = await db.solWallet.findFirst({
+        where: {
+            userId: session?.user?.uid
+        },
+        select : {
+            publicKey: true
+        },
+    })
+    if(!userWalletInfo) {
+        return {
+            error : "No solana wallet associated to the user"
+        }
+    }
+}
+
+export default async function dashboard() {
+
+    const userWallet = await getuserWallet();
+
+    if(userWallet?.error || !userWallet?.userWallet?.publicKey)  {
+        return <>
+            No solana wallet found
+        </>
+    }
     return <div>
-        Dashboard
+        <ProfileCard/>
     </div>
 }
