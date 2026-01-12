@@ -6,7 +6,7 @@ import { error } from "console";
 
 async function getuserWallet() {
     const session = await getServerSession(authConfig);
-    const userWalletInfo = await db.solWallet.findFirst({
+    const userWallet = await db.solWallet.findFirst({
         where: {
             userId: session?.user?.uid
         },
@@ -14,23 +14,24 @@ async function getuserWallet() {
             publicKey: true
         },
     })
-    if(!userWalletInfo) {
+    if(!userWallet) {
         return {
             error : "No solana wallet associated to the user"
         }
     }
+    return {error: null, userWallet}
 }
 
 export default async function dashboard() {
 
     const userWallet = await getuserWallet();
 
-    if(userWallet?.error || !userWallet?.userWallet?.publicKey)  {
+    if(userWallet?.error || !userWallet.userWallet?.publicKey)  {
         return <>
             No solana wallet found
         </>
     }
     return <div>
-        <ProfileCard/>
+        <ProfileCard publicKey={userWallet.userWallet?.publicKey}/>
     </div>
 }
