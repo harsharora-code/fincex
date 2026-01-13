@@ -26,7 +26,7 @@ export const SUPPORTED_TOKENS : {
 {
     name: "SOL",
     mint: "So11111111111111111111111111111111111111111",
-    native: false
+    native: true
 }
 ]
 
@@ -38,6 +38,7 @@ export async function getSupportedTokens() {
         try {
              const response = await axios.get(`https://api.coinlayer.com/api/live?access_key=${access_key}`);
           prices = response.data.rates;
+
           LAST_UPDATED = new Date().getTime();
 
         } catch(e) {
@@ -45,9 +46,9 @@ export async function getSupportedTokens() {
         }
           
     }
-    SUPPORTED_TOKENS.map(s => ({
+    return SUPPORTED_TOKENS.map(s => ({
         ...s,
-        prices: prices[s.name]
+        prices: prices[s.name],
     }))
 }
 getSupportedTokens();
