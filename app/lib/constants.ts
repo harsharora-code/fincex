@@ -34,9 +34,16 @@ export const connection = new Connection("https://api.mainnet-beta.solana.com");
 
 export async function getSupportedTokens() {
     if(!LAST_UPDATED || new Date().getTime() - LAST_UPDATED < TOKEN_PRICE_REFRESH_INTERVAL) {
-          const response = await axios.get(`https://api.coinlayer.com/api/live?access_key=${access_key}`);
+
+        try {
+             const response = await axios.get(`https://api.coinlayer.com/api/live?access_key=${access_key}`);
           prices = response.data.rates;
           LAST_UPDATED = new Date().getTime();
+
+        } catch(e) {
+            console.log(e);
+        }
+          
     }
     SUPPORTED_TOKENS.map(s => ({
         ...s,
