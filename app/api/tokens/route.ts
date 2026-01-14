@@ -11,12 +11,17 @@ export async function GET(req: NextRequest) {
     const supportedTokens = await getSupportedTokens();
   const balances = await Promise.all(SUPPORTED_TOKENS.map(token => getAccountBalance(token, address)))
 
-  return NextResponse.json({
-    tokens: supportedTokens.map((token, index) => ({
+const tokens = supportedTokens.map((token, index) => ({
         ...token,
         balances: balances[index].toFixed(2),
-        usdBalance: balances[index] * Number (token.prices)
-    }))
+        usdBalance: (balances[index] * Number(token.prices)).toFixed(2)
+    }));
+
+  return NextResponse.json({
+
+    tokens,
+    totalBalance: tokens.reduce((acc, val) => acc + val.usdBalance, 0)
+
   })
 
 }
@@ -30,8 +35,7 @@ export async function GET(req: NextRequest) {
         let balance = await connection.getBalance(new PublicKey(address));
         return balance / LAMPORTS_PER_SOL;
 
-
-    }
+}
 
     const ata = await getAssociatedTokenAddress(new PublicKey(token.mint), new PublicKey(address));
 
