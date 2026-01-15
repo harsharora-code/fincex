@@ -10,19 +10,47 @@ export async function GET(req: NextRequest) {
     const address = searchParams.get("address");
     const supportedTokens = await getSupportedTokens();
   const balances = await Promise.all(SUPPORTED_TOKENS.map(token => getAccountBalance(token, address)))
+  
 
-const tokens = supportedTokens.map((token, index) => ({
-        ...token,
-        balances: balances[index].toFixed(2),
-        usdBalance: (balances[index] * Number(token.prices)).toFixed(2)
-    }));
+const tokens = supportedTokens.map((token, index) => {
+  const balance = Number(balances[index] ?? 0);
+  const price =
+    token.name === "USDC"
+      ? 1
+      : Number(token.prices ?? 0);
 
-  return NextResponse.json({
+  return {
+    ...token,
+    balances: balance,
+    usdBalance: (balance * price),
+  };
+});
 
-    tokens,
-    totalBalance: tokens.reduce((acc, val) => acc + val.usdBalance, 0)
+const totalBalance = tokens.reduce(
+  (acc, val) => acc + Number(val.usdBalance),
+  0
+);
 
-  })
+return NextResponse.json({
+  tokens,
+  totalBalance: totalBalance,
+});
+
+// const tokens = supportedTokens.map((token, index) => ({
+//         ...token,
+//         balances: balances[index].toFixed(2),
+//         usdBalance: (balances[index] * Number(token.price)).toFixed(2)
+//     }));
+
+//   return NextResponse.json({
+
+//     tokens,
+//     totalBalance: tokens.reduce(
+//       (acc, val) => acc + Number(val.usdBalance),
+//     0 
+//   )
+
+//   })
 
 }
 
