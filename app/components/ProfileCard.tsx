@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { PrimaryButton } from "./Button";
 import { useTokens } from "../api/hooks/useTokens";
+import { TokenList } from "./TokenList";
 export const ProfileCard = ({publicKey}: {
     publicKey: String
 }) => {
@@ -60,11 +61,17 @@ function Assets({publicKey}: {
     return <div className="text-slate-500 mt-4">
      Account Assets
          <br />
-          <div className="flex justify-between">
-            <div>
-                {tokenBalances?.totalBalance}
+          <div className="flex justify-between pt-2">
+            <div className="flex">
+            <div className="text-4xl font-bold text-white">
+                ${tokenBalances?.totalBalance.toFixed(2)}
+            </div>
+            <div className="text-white font-bold text-2xl flex flex-col justify-end pb-0 pl-2">
+                USD
+
             </div>
 
+          </div>
           </div>
          <div>
             <PrimaryButton onClick={() => {
@@ -73,7 +80,7 @@ function Assets({publicKey}: {
             }}>{copied ? "copied": "Your Wallet Address"}</PrimaryButton>
          </div>
          <div>
-            {JSON.stringify(tokenBalances?.tokens)}
+              <TokenList tokens={tokenBalances?.tokens || []}/>
          </div>
     </div>
 }

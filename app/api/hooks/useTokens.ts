@@ -2,7 +2,7 @@ import { TokenDetails } from "@/app/lib/constants";
 import axios from "axios";
 import { useEffect, useState } from "react";
 
-interface TokenBalance extends TokenDetails {
+export interface TokenBalance extends TokenDetails {
     balance: string;
     usdBalance: string;
 }
