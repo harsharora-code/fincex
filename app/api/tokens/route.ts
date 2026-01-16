@@ -2,8 +2,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAssociatedTokenAddress, getAccount, getMint } from "@solana/spl-token";
 import { LAMPORTS_PER_SOL, PublicKey } from "@solana/web3.js";
-import { SUPPORTED_TOKENS, connection, getSupportedTokens } from "@/app/lib/constants";
-
+import { SUPPORTED_TOKENS} from "@/app/lib/tokens";
+import { connection, getSupportedTokens } from "@/app/lib/constants";
 
 export async function GET(req: NextRequest) {
     const {searchParams} = new URL(req.url);
