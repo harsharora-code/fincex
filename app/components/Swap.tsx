@@ -3,8 +3,9 @@ import { assert } from "console";
 import { SUPPORTED_TOKENS, TokenDetails } from "../lib/tokens"
 import { useEffect } from "react";
 import { ReactNode, use, useState } from "react"
-import { Slabo_13px } from "next/font/google";
 import { TokenBalance } from "@solana/web3.js";
+import { PrimaryButton } from "./Button";
+import { Fascinate } from "next/font/google";
 
 export function Swap({publicKey, tokenBalances}: {
     publicKey: string;
@@ -17,6 +18,8 @@ export function Swap({publicKey, tokenBalances}: {
     const [quoteAsset, setQuoteAsset] = useState(SUPPORTED_TOKENS[1]);
     const [baseAmount, setBaseAmount] = useState<string>();
     const [quoteAmount, setQuoteAmount] = useState<string>();
+    conwst [quoteResponse, setQuoteResponse] = useState(null);
+    const [fetchingQWuote, setFetchingQuote] = useState(false);
 
     useEffect(() => {
         if(!baseAmount) {
@@ -66,14 +69,15 @@ export function Swap({publicKey, tokenBalances}: {
             setQuoteAsset(asset)
         }} selectedToken={quoteAsset} title={"You Recive"}
             topBorderEnabled={false} 
-            bottomBorderEnabled={true}
-            subtitle={<div className="text-slate-500 pt-1 text-sm pl-1 flex">
-                <div className="font-normal pr-1">
-                    Current Balance:
-                </div>
-                
-            </div>}
-            />
+            bottomBorderEnabled={true} />
+
+            <div className="flex justify-end pt-4">
+           <PrimaryButton onClick={() => {
+
+           }}> 
+            Swap
+           </PrimaryButton>
+           </div>
     </div>
     
 }
@@ -84,7 +88,7 @@ export function SwapInputRow({onSelect, selectedToken, title, topBorderEnabled, 
     title: string;
     topBorderEnabled: boolean;
     bottomBorderEnabled: boolean;
-    subtitle: ReactNode;
+    subtitle?: ReactNode;
     amount?: string;
     onAmountChange?: (value: string) => void;
 }) {

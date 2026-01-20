@@ -5,13 +5,15 @@ export interface TokenDetails {
     native: boolean;
     image:   string;
     price?: string;
+    decimals: number;
 }
 export const SUPPORTED_TOKENS : TokenDetails[] = [{
     name: "USDC",
     mint : "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
     native: false,
     image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbBMfDxr1PrxlKVnOBktTGlNgXSVYUT0LB7Q&s",
-    price : "1"
+    price : "1",
+    decimals: 6,
    
 },
 {
@@ -20,6 +22,7 @@ export const SUPPORTED_TOKENS : TokenDetails[] = [{
     native: false,
     image: "https://img.freepik.com/premium-psd/green-circle-with-large-t-it-that-is-labeled-t_767610-17.jpg?semt=ais_hybrid&w=740&q=80",
     price: "1",
+    decimals: 6
 },
 {
     name: "SOL",
@@ -27,6 +30,7 @@ export const SUPPORTED_TOKENS : TokenDetails[] = [{
     native: true,
     image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRTOOhDi1KrwwS7G_H1yvSkMoiPhO3anGP8_w&s",
     price: "180",
+    decimals: 9
 
     
 }
