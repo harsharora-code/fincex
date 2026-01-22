@@ -1,11 +1,10 @@
 "use client"
-import { assert } from "console";
 import { SUPPORTED_TOKENS, TokenDetails } from "../lib/tokens"
 import { useEffect } from "react";
 import { ReactNode, use, useState } from "react"
 import { TokenBalance } from "@solana/web3.js";
 import { PrimaryButton } from "./Button";
-import { Fascinate } from "next/font/google";
+import axios from "axios"
 
 export function Swap({publicKey, tokenBalances}: {
     publicKey: string;
@@ -18,13 +17,18 @@ export function Swap({publicKey, tokenBalances}: {
     const [quoteAsset, setQuoteAsset] = useState(SUPPORTED_TOKENS[1]);
     const [baseAmount, setBaseAmount] = useState<string>();
     const [quoteAmount, setQuoteAmount] = useState<string>();
-    conwst [quoteResponse, setQuoteResponse] = useState(null);
+    const [quoteResponse, setQuoteResponse] = useState(null);
     const [fetchingQWuote, setFetchingQuote] = useState(false);
 
     useEffect(() => {
         if(!baseAmount) {
             return; 
         }
+
+        axios.get(`https://lite-api.jup.ag/swap/v1/quote?inputMint=${baseAsset.mint}&outputMint=${quoteAsset.mint}&amount=${Number(baseAmount) * (10 ** baseAsset.decimals)}&slippageBps=50&restrictIntermediateTokens=true`)
+        .then(res => {
+            setQuoteAmount((Number(res.data.outAmount) / Number( 10 ** quoteAsset.decimals)).toString())
+        })
 
     },  [baseAsset, quoteAsset, baseAmount])
 
@@ -89,7 +93,7 @@ export function SwapInputRow({onSelect, selectedToken, title, topBorderEnabled, 
     topBorderEnabled: boolean;
     bottomBorderEnabled: boolean;
     subtitle?: ReactNode;
-    amount?: string;
+    amount: string;
     onAmountChange?: (value: string) => void;
 }) {
     return <div className={`border flex justify-between p-6 ${topBorderEnabled ? "rounded-t-xl" : ""} ${bottomBorderEnabled ? "rounded-b-xl" : ""}`}>

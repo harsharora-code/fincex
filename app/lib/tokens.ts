@@ -8,15 +8,14 @@ export interface TokenDetails {
     decimals: number;
 }
 export const SUPPORTED_TOKENS : TokenDetails[] = [{
-    name: "USDC",
-    mint : "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
-    native: false,
-    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbBMfDxr1PrxlKVnOBktTGlNgXSVYUT0LB7Q&s",
-    price : "1",
-    decimals: 6,
-   
+    name: "SOL",
+    mint: "So11111111111111111111111111111111111111111",
+    native: true,
+    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRTOOhDi1KrwwS7G_H1yvSkMoiPhO3anGP8_w&s",
+    price: "180",
+    decimals: 9,
 },
-{
+{ 
     name: "USDT",
     mint: "Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB",
     native: false,
@@ -25,13 +24,13 @@ export const SUPPORTED_TOKENS : TokenDetails[] = [{
     decimals: 6
 },
 {
-    name: "SOL",
-    mint: "So11111111111111111111111111111111111111111",
-    native: true,
-    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRTOOhDi1KrwwS7G_H1yvSkMoiPhO3anGP8_w&s",
-    price: "180",
-    decimals: 9
+    name: "USDC",
+    mint : "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+    native: false,
+    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbBMfDxr1PrxlKVnOBktTGlNgXSVYUT0LB7Q&s",
+    price : "1",
+    decimals: 6,
+   
+},
 
-    
-}
 ]

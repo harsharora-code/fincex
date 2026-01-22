@@ -58,6 +58,7 @@ return NextResponse.json({
     name: string;
     mint: string;
     native: boolean;
+    decimals: number;
 }, address: string) {
     if(token.native) {
         let balance = await connection.getBalance(new PublicKey(address));
@@ -71,7 +72,7 @@ return NextResponse.json({
 
     const account = await getAccount(connection, ata);
     const mint  = await getMint(connection, new PublicKey(token.mint));
-    return Number(account.amount)/ (10 ** mint.decimals );
+    return Number(account.amount)/ (10 ** decimals);
 
     } catch(e) {
         return 0;
