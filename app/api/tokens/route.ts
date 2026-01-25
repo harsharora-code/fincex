@@ -72,7 +72,7 @@ return NextResponse.json({
 
     const account = await getAccount(connection, ata);
     const mint  = await getMint(connection, new PublicKey(token.mint));
-    return Number(account.amount)/ (10 ** decimals);
+    return Number(account.amount)/ (10 ** token.decimals);
 
     } catch(e) {
         return 0;
