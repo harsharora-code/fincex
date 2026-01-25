@@ -50,7 +50,6 @@ await fetch('https://api.jup.ag/swap/v1/swap', {
     method: 'POST',
     headers: {
     'Content-Type': 'application/json',
-    'x-api-key': '27971fad-5a42-45ac-8d11-f9a2d1886ec0',
     },
     body: JSON.stringify({
     quoteResponse: data.quoteResponse,
