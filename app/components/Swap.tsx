@@ -18,16 +18,18 @@ export function Swap({publicKey, tokenBalances}: {
     const [baseAmount, setBaseAmount] = useState<string>();
     const [quoteAmount, setQuoteAmount] = useState<string>();
     const [quoteResponse, setQuoteResponse] = useState(null);
-    const [fetchingQWuote, setFetchingQuote] = useState(false);
-
+    const [fetchingQuote, setFetchingQuote] = useState(false);
     useEffect(() => {
         if(!baseAmount) {
             return; 
         }
+setFetchingQuote(true)
+axios.get(`https://lite-api.jup.ag/swap/v1/quote?inputMint=${baseAsset.mint}&outputMint=${quoteAsset.mint}&amount=${Number(baseAmount) * (10 ** baseAsset.decimals)}&slippageBps=50&restrictIntermediateTokens=true`)
+.then(res => {
+    setQuoteAmount((Number(res.data.outAmount) / Number( 10 ** quoteAsset.decimals)).toString())
+    setFetchingQuote(false);
+    setQuoteResponse(res.data);
 
-        axios.get(`https://lite-api.jup.ag/swap/v1/quote?inputMint=${baseAsset.mint}&outputMint=${quoteAsset.mint}&amount=${Number(baseAmount) * (10 ** baseAsset.decimals)}&slippageBps=50&restrictIntermediateTokens=true`)
-        .then(res => {
-            setQuoteAmount((Number(res.data.outAmount) / Number( 10 ** quoteAsset.decimals)).toString())
         })
 
     },  [baseAsset, quoteAsset, baseAmount])
@@ -76,7 +78,19 @@ export function Swap({publicKey, tokenBalances}: {
             bottomBorderEnabled={true} />
 
             <div className="flex justify-end pt-4">
-           <PrimaryButton onClick={() => {
+           <PrimaryButton onClick={async () => {
+            try {
+
+                const res  = await axios.post("/api/swap", {
+                    quoteResponse,
+                }
+
+                )
+
+            } catch(e) {
+                alert("Error while sending a txn")
+            }
+    
 
            }}> 
             Swap
@@ -86,7 +100,7 @@ export function Swap({publicKey, tokenBalances}: {
     
 }
 
-export function SwapInputRow({onSelect, selectedToken, title, topBorderEnabled, bottomBorderEnabled, subtitle, amount, onAmountChange} : {
+export function SwapInputRow({onSelect, selectedToken, title, topBorderEnabled, bottomBorderEnabled, subtitle, amount, onAmountChange, inputyDisabled, inputLoading} : {
     onSelect : (asset: TokenDetails) => void;
     selectedToken: TokenDetails;
     title: string;
@@ -95,6 +109,8 @@ export function SwapInputRow({onSelect, selectedToken, title, topBorderEnabled, 
     subtitle?: ReactNode;
     amount: string;
     onAmountChange?: (value: string) => void;
+    inputDisabled?: boolean;
+    inputLoading?: boolean;
 }) {
     return <div className={`border flex justify-between p-6 ${topBorderEnabled ? "rounded-t-xl" : ""} ${bottomBorderEnabled ? "rounded-b-xl" : ""}`}>
         <div>
@@ -106,6 +122,7 @@ export function SwapInputRow({onSelect, selectedToken, title, topBorderEnabled, 
         </div>
         <div>
             <input
+            disabled={inputyDisabled}
             onChange={(e) => {
                 onAmountChange?.(e.target.value);
             }} 

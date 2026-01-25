@@ -9,7 +9,7 @@ export interface TokenDetails {
 }
 export const SUPPORTED_TOKENS : TokenDetails[] = [{
     name: "SOL",
-    mint: "So11111111111111111111111111111111111111111",
+    mint: "So11111111111111111111111111111111111111112",
     native: true,
     image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRTOOhDi1KrwwS7G_H1yvSkMoiPhO3anGP8_w&s",
     price: "180",
